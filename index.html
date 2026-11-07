@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poulet fumé d'Agnibilékro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Layout: one narrow mobile column, order built top to bottom, total and WhatsApp button pinned at the bottom. */
+  --bg: #f3f5f1;
+  --surface: #ffffff;
+  --ink: #1c231f;
+  --muted: #5b6a61;
+  --line: #dce3dd;
+  --accent: #1d6a4d;
+  --accent-ink: #ffffff;
+  --smoke: #a5561a;
+  --smoke-soft: #f6e9dc;
+  --danger: #b3261e;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111613; --surface: #1a211d; --ink: #e7eee9; --muted: #9db0a5; --line: #2b3530;
+    --accent: #52b48d; --accent-ink: #0b1712; --smoke: #e7a062; --smoke-soft: #3a2a1d; --danger: #ff8b80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111613; --surface: #1a211d; --ink: #e7eee9; --muted: #9db0a5; --line: #2b3530;
+  --accent: #52b48d; --accent-ink: #0b1712; --smoke: #e7a062; --smoke-soft: #3a2a1d; --danger: #ff8b80;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.45;
+  padding-bottom: 150px;
+}
+main { max-width: 560px; margin: 0 auto; padding: 24px 16px 0; display: flex; flex-direction: column; gap: 18px; }
+header { display: flex; flex-direction: column; gap: 6px; padding: 4px 2px 6px; }
+.kicker { font-size: 14px; font-weight: 600; color: var(--smoke); letter-spacing: .02em; }
+h1 { font-family: var(--font-display); font-weight: 750; font-size: 32px; line-height: 1.08; margin: 0; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); max-width: 46ch; }
+section { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; display: flex; gap: 10px; align-items: baseline; }
+h2 .step { font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--accent); }
+.profiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.profile { text-align: left; font: inherit; color: var(--ink); background: var(--bg); border: 2px solid var(--line); border-radius: 12px; padding: 12px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+.profile strong { font-size: 17px; }
+.profile span { font-size: 14px; color: var(--muted); }
+.profile[aria-pressed="true"] { border-color: var(--accent); background: var(--surface); box-shadow: inset 0 0 0 1px var(--accent); }
+.products { display: flex; flex-direction: column; }
+.product { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); }
+.product:first-child { border-top: 0; padding-top: 2px; }
+.product .name { font-weight: 600; }
+.product .price { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.product .price b { color: var(--smoke); }
+.stepper { display: flex; align-items: center; gap: 4px; }
+.stepper button { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; }
+.stepper input { width: 52px; height: 40px; text-align: center; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); }
+.hint { font-size: 15px; background: var(--smoke-soft); color: var(--ink); border-radius: 10px; padding: 10px 12px; margin: 0; }
+.hint[hidden] { display: none; }
+label { font-size: 15px; font-weight: 600; display: flex; flex-direction: column; gap: 6px; }
+label small { font-weight: 400; color: var(--muted); }
+select, input[type="text"], input[type="tel"], textarea {
+  font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%;
+}
+textarea { min-height: 70px; resize: vertical; }
+.modes { display: flex; flex-direction: column; gap: 8px; }
+.mode { display: flex; flex-direction: row; gap: 10px; align-items: flex-start; font-weight: 400; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.mode input { margin-top: 4px; accent-color: var(--accent); }
+.mode b { display: block; }
+.mode span { font-size: 14px; color: var(--muted); }
+.recap { display: flex; flex-direction: column; gap: 6px; font-variant-numeric: tabular-nums; }
+.recap .line { display: flex; justify-content: space-between; gap: 12px; }
+.recap .line.total { font-weight: 700; border-top: 1px solid var(--line); padding-top: 8px; margin-top: 2px; }
+.recap .empty { color: var(--muted); margin: 0; }
+.pay { font-size: 15px; border-left: 3px solid var(--smoke); padding: 4px 0 4px 10px; margin: 0; }
+.errors { color: var(--danger); font-size: 15px; margin: 0; padding-left: 18px; }
+.errors:empty { display: none; }
+.bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); }
+.bar-inner { max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+.bar .sum { flex: 1; display: flex; flex-direction: column; font-variant-numeric: tabular-nums; }
+.bar .sum small { color: var(--muted); font-size: 13px; }
+.bar .sum strong { font-size: 20px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-weight: 700; border-radius: 12px; padding: 12px 16px; background: var(--accent); color: var(--accent-ink); border: 0; font: inherit; font-weight: 700; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--line); padding: 10px 14px; font-size: 15px; }
+.copy-row { display: flex; justify-content: flex-end; }
+.note { font-size: 14px; color: var(--muted); margin: 0; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--smoke); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">Précommande · retrait ou livraison depuis Abobo Belleville</div>
+    <h1>Poulet fumé d'Agnibilékro</h1>
+    <p>Pondeuses élevées à Agnibilékro, vendues à Abidjan. Composez votre commande puis envoyez-la sur WhatsApp : la confirmation vous est faite en retour.</p>
+  </header>
+
+  <section aria-labelledby="h-profile">
+    <h2 id="h-profile"><span class="step">1</span>Vous êtes</h2>
+    <div class="profiles">
+      <button type="button" class="profile" id="p-detaillant" data-profile="detaillant" aria-pressed="true">
+        <strong>Particulier ou détaillant</strong>
+        <span>Commande la veille, paiement à la livraison</span>
+      </button>
+      <button type="button" class="profile" id="p-grossiste" data-profile="grossiste" aria-pressed="false">
+        <strong>Grossiste</strong>
+        <span>Dès 10 pondeuses fumées, livraison le samedi, acompte 30 %</span>
+      </button>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-products">
+    <h2 id="h-products"><span class="step">2</span>Vos poulets</h2>
+    <div class="products" id="products"></div>
+    <p class="hint" id="hint" hidden></p>
+  </section>
+
+  <section aria-labelledby="h-when">
+    <h2 id="h-when"><span class="step">3</span>Quand et où</h2>
+    <label for="date">Date souhaitée <small id="date-help"></small>
+      <select id="date"></select>
+    </label>
+    <div class="modes" role="radiogroup" aria-label="Mode de remise">
+      <label class="mode" for="m-retrait"><input type="radio" name="mode" id="m-retrait" value="retrait" checked>
+        <div><b>Retrait à Abobo Belleville</b><span>Sans frais</span></div></label>
+      <label class="mode" for="m-livraison"><input type="radio" name="mode" id="m-livraison" value="livraison">
+        <div><b>Livraison dans Abidjan</b><span>Par un service de livraison, frais à votre charge, environ 1 500 FCFA</span></div></label>
+    </div>
+    <label for="quartier" id="quartier-wrap" hidden>Quartier et repère
+      <input type="text" id="quartier" autocomplete="address-line1" placeholder="Ex. Cocody Riviera 2, près de la pharmacie">
+    </label>
+  </section>
+
+  <section aria-labelledby="h-contact">
+    <h2 id="h-contact"><span class="step">4</span>Vos coordonnées</h2>
+    <label for="name">Nom
+      <input type="text" id="name" autocomplete="name">
+    </label>
+    <label for="phone">Téléphone
+      <input type="tel" id="phone" autocomplete="tel" inputmode="tel" placeholder="07 00 00 00 00">
+    </label>
+    <label for="note">Remarque <small>facultatif</small>
+      <textarea id="note"></textarea>
+    </label>
+  </section>
+
+  <section aria-labelledby="h-recap" id="recap-section">
+    <h2 id="h-recap"><span class="step">5</span>Récapitulatif</h2>
+    <div class="recap" id="recap"></div>
+    <p class="pay" id="pay"></p>
+    <ul class="errors" id="errors" aria-live="polite"></ul>
+    <div class="copy-row"><button type="button" class="btn ghost" id="copy">Copier le message</button></div>
+    <p class="note">La commande est réservée une fois confirmée sur WhatsApp. Si le bouton ne s'ouvre pas, copiez le message et envoyez-le au <span id="wa-display"></span>.</p>
+  </section>
+</main>
+
+<div class="bar">
+  <div class="bar-inner">
+    <div class="sum"><small id="bar-label">Total</small><strong id="bar-total">0 FCFA</strong></div>
+    <a class="btn" id="send" href="#" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>
+  </div>
+</div>
+
+<script>
+// PURE-START
+const CONFIG = {
+  shopName: "Poulet fumé d'Agnibilékro",
+  whatsapp: "2250758914660",
+  phoneDisplay: "07 58 91 46 60",
+  pickup: "Abobo Belleville",
+  deliveryFeeEstimate: 1500,
+  wholesaleMin: 10,
+  depositRate: 0.3,
+  wholesaleCutoffDays: 3,
+  wholesaleSaturdays: 4,
+  retailWindowDays: 14,
+  products: [
+    { id: "fume-entier", name: "Pondeuse fumée entière", retail: 3500, wholesale: 3300 },
+    { id: "fume-decoupe", name: "Pondeuse fumée découpée et emballée", retail: 3800, wholesale: null },
+    { id: "fraiche-decoupe", name: "Pondeuse fraîche découpée", retail: 4000, wholesale: null }
+  ]
+};
+
+function fcfa(n) {
+  return Math.round(n).toLocaleString("fr-FR").replace(/ | /g, " ") + " FCFA";
+}
+
+function isoDate(d) {
+  const p = (x) => String(x).padStart(2, "0");
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+}
+
+function dateLabel(d) {
+  return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+}
+
+/** Dates a customer may pick: retail from tomorrow, wholesale only Saturdays at least 3 days ahead. */
+function availableDates(profile, now) {
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const out = [];
+  if (profile === "grossiste") {
+    for (let i = CONFIG.wholesaleCutoffDays; out.length < CONFIG.wholesaleSaturdays && i < 60; i++) {
+      const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+      if (d.getDay() === 6) out.push({ value: isoDate(d), label: dateLabel(d) });
+    }
+  } else {
+    for (let i = 1; i <= CONFIG.retailWindowDays; i++) {
+      const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+      out.push({ value: isoDate(d), label: dateLabel(d) });
+    }
+  }
+  return out;
+}
+
+function unitPrice(product, profile) {
+  return profile === "grossiste" ? product.wholesale : product.retail;
+}
+
+function computeOrder(state) {
+  const lines = [];
+  for (const p of CONFIG.products) {
+    const q = state.qty[p.id] || 0;
+    const price = unitPrice(p, state.profile);
+    if (q > 0 && price != null) lines.push({ id: p.id, name: p.name, qty: q, price, amount: q * price });
+  }
+  const total = lines.reduce((s, l) => s + l.amount, 0);
+  const deposit = state.profile === "grossiste" ? Math.round(total * CONFIG.depositRate) : 0;
+  return { lines, total, deposit };
+}
+
+function validate(state, order) {
+  const errs = [];
+  if (order.lines.length === 0) errs.push("Choisissez au moins un poulet.");
+  if (state.profile === "grossiste") {
+    const q = state.qty["fume-entier"] || 0;
+    if (q > 0 && q < CONFIG.wholesaleMin) errs.push("Le tarif grossiste démarre à " + CONFIG.wholesaleMin + " pondeuses fumées entières : il en manque " + (CONFIG.wholesaleMin - q) + ".");
+  }
+  if (!state.date) errs.push("Choisissez une date.");
+  if (state.mode === "livraison" && state.quartier.trim().length < 3) errs.push("Indiquez le quartier de livraison.");
+  if (state.name.trim().length < 2) errs.push("Indiquez votre nom.");
+  if (state.phone.replace(/\D/g, "").length < 8) errs.push("Indiquez un numéro de téléphone valide.");
+  return errs;
+}
+
+function buildMessage(state, order, dateText) {
+  const L = [];
+  L.push("Bonjour, je souhaite passer une commande (" + CONFIG.shopName + ").");
+  L.push("");
+  L.push("Profil : " + (state.profile === "grossiste" ? "grossiste" : "particulier ou détaillant"));
+  for (const l of order.lines) L.push("- " + l.qty + " x " + l.name + " à " + fcfa(l.price) + " = " + fcfa(l.amount));
+  L.push("Total : " + fcfa(order.total));
+  if (state.profile === "grossiste") {
+    L.push("Acompte 30 % : " + fcfa(order.deposit) + " par Wave ou Orange Money au " + CONFIG.phoneDisplay);
+    L.push("Solde à la livraison : " + fcfa(order.total - order.deposit));
+  } else {
+    L.push("Paiement à la livraison");
+  }
+  L.push("");
+  L.push("Date souhaitée : " + dateText);
+  if (state.mode === "livraison") L.push("Livraison : " + state.quartier.trim() + " (frais de livraison à ma charge)");
+  else L.push("Retrait à " + CONFIG.pickup);
+  L.push("Nom : " + state.name.trim());
+  L.push("Téléphone : " + state.phone.trim());
+  if (state.note.trim()) L.push("Remarque : " + state.note.trim());
+  return L.join("\n");
+}
+// PURE-END
+
+const state = { profile: "detaillant", qty: {}, date: "", mode: "retrait", quartier: "", name: "", phone: "", note: "" };
+const $ = (id) => document.getElementById(id);
+
+function renderProducts() {
+  const box = $("products");
+  box.innerHTML = "";
+  for (const p of CONFIG.products) {
+    const price = unitPrice(p, state.profile);
+    if (price == null) continue;
+    const row = document.createElement("div");
+    row.className = "product";
+    const unit = state.profile === "grossiste" ? "l'unité, tarif grossiste" : "l'unité";
+    row.innerHTML =
+      '<div><div class="name"></div><div class="price"><b></b> ' + unit + '</div></div>' +
+      '<div class="stepper">' +
+      '<button type="button" aria-label="Retirer un">−</button>' +
+      '<input type="number" min="0" step="1" inputmode="numeric" id="q-' + p.id + '">' +
+      '<button type="button" aria-label="Ajouter un">+</button></div>';
+    row.querySelector(".name").textContent = p.name;
+    row.querySelector(".price b").textContent = fcfa(price);
+    const input = row.querySelector("input");
+    input.setAttribute("aria-label", "Quantité " + p.name);
+    input.value = state.qty[p.id] || 0;
+    const [minus, plus] = row.querySelectorAll("button");
+    const set = (v) => { state.qty[p.id] = Math.max(0, Math.min(999, Math.floor(Number(v) || 0))); input.value = state.qty[p.id]; update(); };
+    minus.addEventListener("click", () => set((state.qty[p.id] || 0) - 1));
+    plus.addEventListener("click", () => set((state.qty[p.id] || 0) + 1));
+    input.addEventListener("change", () => set(input.value));
+    box.appendChild(row);
+  }
+}
+
+function renderDates() {
+  const sel = $("date");
+  const dates = availableDates(state.profile, new Date());
+  sel.innerHTML = "";
+  const ph = document.createElement("option");
+  ph.value = ""; ph.textContent = "Choisir une date";
+  sel.appendChild(ph);
+  for (const d of dates) {
+    const o = document.createElement("option");
+    o.value = d.value; o.textContent = d.label.charAt(0).toUpperCase() + d.label.slice(1);
+    sel.appendChild(o);
+  }
+  if (!dates.some((d) => d.value === state.date)) state.date = "";
+  sel.value = state.date;
+  $("date-help").textContent = state.profile === "grossiste"
+    ? "livraison le samedi, commande au plus tard le mercredi"
+    : "à partir de demain";
+}
+
+function setProfile(profile) {
+  state.profile = profile;
+  for (const b of document.querySelectorAll(".profile")) b.setAttribute("aria-pressed", String(b.dataset.profile === profile));
+  for (const p of CONFIG.products) if (unitPrice(p, profile) == null) state.qty[p.id] = 0;
+  renderProducts();
+  renderDates();
+  update();
+}
+
+function update() {
+  const order = computeOrder(state);
+  const recap = $("recap");
+  recap.innerHTML = "";
+  if (order.lines.length === 0) {
+    const p = document.createElement("p"); p.className = "empty"; p.textContent = "Aucun poulet choisi pour l'instant.";
+    recap.appendChild(p);
+  } else {
+    for (const l of order.lines) addLine(recap, l.qty + " × " + l.name, fcfa(l.amount));
+    addLine(recap, "Total", fcfa(order.total), "total");
+    if (state.mode === "livraison") addLine(recap, "Livraison, payée au livreur", "≈ " + fcfa(CONFIG.deliveryFeeEstimate));
+  }
+  $("pay").textContent = state.profile === "grossiste"
+    ? "Acompte de 30 % à la commande : " + fcfa(order.deposit) + " par Wave ou Orange Money au " + CONFIG.phoneDisplay + ", en indiquant votre nom. Le solde se règle à la livraison."
+    : "Paiement à la livraison. Commandez au plus tard la veille.";
+
+  const fumeQty = state.qty["fume-entier"] || 0;
+  const hint = $("hint");
+  if (state.profile === "detaillant" && fumeQty >= CONFIG.wholesaleMin) {
+    hint.hidden = false;
+    hint.textContent = "À partir de " + CONFIG.wholesaleMin + " pondeuses fumées entières, le profil grossiste vous donne " + fcfa(3300) + " l'unité, avec livraison le samedi et un acompte de 30 %.";
+  } else if (state.profile === "grossiste" && fumeQty > 0 && fumeQty < CONFIG.wholesaleMin) {
+    hint.hidden = false;
+    hint.textContent = "Encore " + (CONFIG.wholesaleMin - fumeQty) + " pour atteindre le minimum grossiste de " + CONFIG.wholesaleMin + ".";
+  } else {
+    hint.hidden = true;
+  }
+
+  $("bar-label").textContent = state.profile === "grossiste" && order.total > 0 ? "Total, acompte " + fcfa(order.deposit) : "Total";
+  $("bar-total").textContent = fcfa(order.total);
+
+  const sel = $("date");
+  const dateText = state.date ? sel.options[sel.selectedIndex].textContent : "";
+  const msg = buildMessage(state, order, dateText);
+  $("send").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(msg);
+  $("errors").innerHTML = "";
+  return { order, msg };
+}
+
+function addLine(box, left, right, cls) {
+  const d = document.createElement("div");
+  d.className = "line" + (cls ? " " + cls : "");
+  const a = document.createElement("span"); a.textContent = left;
+  const b = document.createElement("span"); b.textContent = right;
+  d.append(a, b);
+  box.appendChild(d);
+}
+
+function showErrors(errs) {
+  const ul = $("errors");
+  ul.innerHTML = "";
+  for (const e of errs) { const li = document.createElement("li"); li.textContent = e; ul.appendChild(li); }
+  $("recap-section").scrollIntoView({ block: "start" });
+}
+
+for (const b of document.querySelectorAll(".profile")) b.addEventListener("click", () => setProfile(b.dataset.profile));
+$("date").addEventListener("change", (e) => { state.date = e.target.value; update(); });
+for (const r of document.querySelectorAll('input[name="mode"]')) r.addEventListener("change", (e) => {
+  state.mode = e.target.value;
+  $("quartier-wrap").hidden = state.mode !== "livraison";
+  update();
+});
+for (const id of ["quartier", "name", "phone", "note"]) $(id).addEventListener("input", (e) => { state[id] = e.target.value; update(); });
+
+$("send").addEventListener("click", (e) => {
+  const { order } = update();
+  const errs = validate(state, order);
+  if (errs.length) { e.preventDefault(); showErrors(errs); }
+});
+
+$("copy").addEventListener("click", async () => {
+  const { order, msg } = update();
+  const errs = validate(state, order);
+  if (errs.length) { showErrors(errs); return; }
+  try { await navigator.clipboard.writeText(msg); $("copy").textContent = "Message copié"; }
+  catch { $("copy").textContent = "Copie impossible sur cet appareil"; }
+  setTimeout(() => { $("copy").textContent = "Copier le message"; }, 2500);
+});
+
+$("wa-display").textContent = CONFIG.phoneDisplay;
+setProfile("detaillant");
+</script>
+</body>
+</html>
