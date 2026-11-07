@@ -1,4 +1,4 @@
-# Poulet fumé d'Agnibilékro
+# Poulet fumé bio
 
 Page de précommande (pondeuses fumées et fraîches, Abobo Belleville, Abidjan). Les commandes sont envoyées sur WhatsApp.
 

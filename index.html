@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Poulet fumé d'Agnibilékro</title>
+<title>Poulet fumé bio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -102,15 +102,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 <main>
   <header>
     <div class="kicker">Précommande · retrait ou livraison depuis Abobo Belleville</div>
-    <h1>Poulet fumé d'Agnibilékro</h1>
-    <p>Pondeuses élevées à Agnibilékro, vendues à Abidjan. Composez votre commande puis envoyez-la sur WhatsApp : la confirmation vous est faite en retour.</p>
+    <h1>Poulet fumé bio</h1>
+    <p>Pondeuses bio, vendues à Abidjan. Composez votre commande puis envoyez-la sur WhatsApp : la confirmation vous est faite en retour.</p>
   </header>
 
   <section aria-labelledby="h-profile">
     <h2 id="h-profile"><span class="step">1</span>Vous êtes</h2>
     <div class="profiles">
       <button type="button" class="profile" id="p-detaillant" data-profile="detaillant" aria-pressed="true">
-        <strong>Particulier ou détaillant</strong>
+        <strong>Détaillant</strong>
         <span>Commande la veille, paiement à la livraison</span>
       </button>
       <button type="button" class="profile" id="p-grossiste" data-profile="grossiste" aria-pressed="false">
@@ -135,7 +135,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
       <label class="mode" for="m-retrait"><input type="radio" name="mode" id="m-retrait" value="retrait" checked>
         <div><b>Retrait à Abobo Belleville</b><span>Sans frais</span></div></label>
       <label class="mode" for="m-livraison"><input type="radio" name="mode" id="m-livraison" value="livraison">
-        <div><b>Livraison dans Abidjan</b><span>Par un service de livraison, frais à votre charge, environ 1 500 FCFA</span></div></label>
+        <div><b>Livraison dans Abidjan</b><span id="delivery-help"></span></div></label>
     </div>
     <label for="quartier" id="quartier-wrap" hidden>Quartier et repère
       <input type="text" id="quartier" autocomplete="address-line1" placeholder="Ex. Cocody Riviera 2, près de la pharmacie">
@@ -175,7 +175,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 <script>
 // PURE-START
 const CONFIG = {
-  shopName: "Poulet fumé d'Agnibilékro",
+  shopName: "Poulet fumé bio",
   whatsapp: "2250758914660",
   phoneDisplay: "07 58 91 46 60",
   pickup: "Abobo Belleville",
@@ -188,7 +188,7 @@ const CONFIG = {
   products: [
     { id: "fume-entier", name: "Pondeuse fumée entière", retail: 3500, wholesale: 3300 },
     { id: "fume-decoupe", name: "Pondeuse fumée découpée et emballée", retail: 3800, wholesale: null },
-    { id: "fraiche-decoupe", name: "Pondeuse fraîche découpée", retail: 4000, wholesale: null }
+    { id: "fraiche-decoupe", name: "Pondeuse fraîche découpée", retail: 4250, wholesale: null }
   ]
 };
 
@@ -257,7 +257,7 @@ function buildMessage(state, order, dateText) {
   const L = [];
   L.push("Bonjour, je souhaite passer une commande (" + CONFIG.shopName + ").");
   L.push("");
-  L.push("Profil : " + (state.profile === "grossiste" ? "grossiste" : "particulier ou détaillant"));
+  L.push("Profil : " + (state.profile === "grossiste" ? "grossiste" : "détaillant"));
   for (const l of order.lines) L.push("- " + l.qty + " x " + l.name + " à " + fcfa(l.price) + " = " + fcfa(l.amount));
   L.push("Total : " + fcfa(order.total));
   if (state.profile === "grossiste") {
@@ -268,7 +268,7 @@ function buildMessage(state, order, dateText) {
   }
   L.push("");
   L.push("Date souhaitée : " + dateText);
-  if (state.mode === "livraison") L.push("Livraison : " + state.quartier.trim() + " (frais de livraison à ma charge)");
+  if (state.mode === "livraison") L.push("Livraison : " + state.quartier.trim() + (state.profile === "grossiste" ? " (course Yango en véhicule à ma charge, prix selon l'heure)" : " (frais de livraison à ma charge)"));
   else L.push("Retrait à " + CONFIG.pickup);
   L.push("Nom : " + state.name.trim());
   L.push("Téléphone : " + state.phone.trim());
@@ -347,7 +347,10 @@ function update() {
   } else {
     for (const l of order.lines) addLine(recap, l.qty + " × " + l.name, fcfa(l.amount));
     addLine(recap, "Total", fcfa(order.total), "total");
-    if (state.mode === "livraison") addLine(recap, "Livraison, payée au livreur", "≈ " + fcfa(CONFIG.deliveryFeeEstimate));
+    if (state.mode === "livraison") {
+      if (state.profile === "grossiste") addLine(recap, "Course Yango, payée par vous", "selon l'heure");
+      else addLine(recap, "Livraison, payée au livreur", "≈ " + fcfa(CONFIG.deliveryFeeEstimate));
+    }
   }
   $("pay").textContent = state.profile === "grossiste"
     ? "Acompte de 30 % à la commande : " + fcfa(order.deposit) + " par Wave ou Orange Money au " + CONFIG.phoneDisplay + ", en indiquant votre nom. Le solde se règle à la livraison."
@@ -367,6 +370,9 @@ function update() {
 
   $("bar-label").textContent = state.profile === "grossiste" && order.total > 0 ? "Total, acompte " + fcfa(order.deposit) : "Total";
   $("bar-total").textContent = fcfa(order.total);
+  $("delivery-help").textContent = state.profile === "grossiste"
+    ? "Course Yango en véhicule, à votre charge, prix variable selon l'heure"
+    : "Par un service de livraison, frais à votre charge, environ " + fcfa(CONFIG.deliveryFeeEstimate);
 
   const sel = $("date");
   const dateText = state.date ? sel.options[sel.selectedIndex].textContent : "";
