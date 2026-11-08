@@ -197,8 +197,13 @@ const CONFIG = {
     { id: "decoupe-moyen", group: "Pondeuse fumée entière découpée", name: "Moyen", retail: 4000, wholesale: null, pieces: 1 },
     { id: "decoupe-petit", group: "Pondeuse fumée entière découpée", name: "Petit, lot de 3", retail: 10500, wholesale: null, pieces: 3, unit: "le lot de 3" },
     { id: "decoupe-grossiste", group: "Pondeuse fumée entière découpée", name: "Prix grossiste", retail: null, wholesale: 3800, pieces: 1 },
-    { id: "fraiche", group: "Pondeuse fraîche entière découpée", name: "À l'unité", retail: 4000, wholesale: null, pieces: 1, image: "images/fraiche-decoupee.jpg", imageAlt: "Pondeuse fraîche découpée en barquette filmée HC SERVICES" }
-  ]};
+    { id: "fraiche", group: "Pondeuse fraîche entière découpée", name: "À l'unité", retail: 4000, wholesale: null, pieces: 1 }
+  ],
+  groupImages: {
+    "Pondeuse fumée entière découpée": { src: "images/fumee-decoupee.jpg", alt: "Pondeuse fumée découpée en barquette filmée HC SERVICES" },
+    "Pondeuse fraîche entière découpée": { src: "images/fraiche-decoupee.jpg", alt: "Pondeuse fraîche découpée en barquette filmée HC SERVICES" }
+  }
+};
 
 function fcfa(n) {
   return Math.round(n).toLocaleString("fr-FR").replace(/ | /g, " ") + " FCFA";
@@ -299,8 +304,9 @@ function renderProducts() {
     if (p.group !== lastGroup) {
       const h = document.createElement("div"); h.className = "group"; h.textContent = p.group;
       box.appendChild(h); lastGroup = p.group;
-      if (p.image) {
-        const img = document.createElement("img"); img.className = "photo"; img.src = p.image; img.alt = p.imageAlt || p.group; img.loading = "lazy";
+      const gi = CONFIG.groupImages[p.group];
+      if (gi) {
+        const img = document.createElement("img"); img.className = "photo"; img.src = gi.src; img.alt = gi.alt; img.loading = "lazy";
         box.appendChild(img);
       }
     }
