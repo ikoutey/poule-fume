@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Poulet fumé bio</title>
+<title>HC SERVICES</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,750&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
   --ink: #1c231f;
   --muted: #5b6a61;
   --line: #dce3dd;
-  --accent: #1d6a4d;
+  --accent: #7a1f3d;
   --accent-ink: #ffffff;
   --smoke: #a5561a;
   --smoke-soft: #f6e9dc;
@@ -27,13 +27,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #111613; --surface: #1a211d; --ink: #e7eee9; --muted: #9db0a5; --line: #2b3530;
-    --accent: #52b48d; --accent-ink: #0b1712; --smoke: #e7a062; --smoke-soft: #3a2a1d; --danger: #ff8b80;
+    --accent: #e58aa6; --accent-ink: #2a0b16; --smoke: #e7a062; --smoke-soft: #3a2a1d; --danger: #ff8b80;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #111613; --surface: #1a211d; --ink: #e7eee9; --muted: #9db0a5; --line: #2b3530;
-  --accent: #52b48d; --accent-ink: #0b1712; --smoke: #e7a062; --smoke-soft: #3a2a1d; --danger: #ff8b80;
+  --accent: #e58aa6; --accent-ink: #2a0b16; --smoke: #e7a062; --smoke-soft: #3a2a1d; --danger: #ff8b80;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -58,7 +58,10 @@ h2 .step { font-family: var(--font-body); font-size: 14px; font-weight: 700; col
 .profile[aria-pressed="true"] { border-color: var(--accent); background: var(--surface); box-shadow: inset 0 0 0 1px var(--accent); }
 .products { display: flex; flex-direction: column; }
 .product { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); }
-.product:first-child { border-top: 0; padding-top: 2px; }
+.group { font-size: 14px; font-weight: 700; color: var(--smoke); padding: 14px 0 2px; }
+.group:first-child { padding-top: 0; }
+.group + .product, .photo + .product { border-top: 0; }
+.photo { width: 100%; height: auto; aspect-ratio: 900 / 491; object-fit: cover; border-radius: 10px; margin: 6px 0 4px; display: block; }
 .product .name { font-weight: 600; }
 .product .price { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .product .price b { color: var(--smoke); }
@@ -101,8 +104,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 <body>
 <main>
   <header>
-    <div class="kicker">Précommande · retrait ou livraison depuis Abobo Belleville</div>
-    <h1>Poulet fumé bio</h1>
+    <div class="kicker">Poulet fumé bio · Abobo Belleville, Abidjan</div>
+    <h1>HC SERVICES</h1>
     <p>Pondeuses bio, vendues à Abidjan. Composez votre commande puis envoyez-la sur WhatsApp : la confirmation vous est faite en retour.</p>
   </header>
 
@@ -175,7 +178,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 <script>
 // PURE-START
 const CONFIG = {
-  shopName: "Poulet fumé bio",
+  shopName: "HC SERVICES",
   whatsapp: "2250758914660",
   phoneDisplay: "07 58 91 46 60",
   pickup: "Abobo Belleville",
@@ -186,11 +189,16 @@ const CONFIG = {
   wholesaleSaturdays: 4,
   retailWindowDays: 14,
   products: [
-    { id: "fume-entier", name: "Pondeuse fumée entière", retail: 3500, wholesale: 3300 },
-    { id: "fume-decoupe", name: "Pondeuse fumée découpée et emballée", retail: 3800, wholesale: null },
-    { id: "fraiche-decoupe", name: "Pondeuse fraîche découpée", retail: 4250, wholesale: null }
-  ]
-};
+    { id: "fume-gros", group: "Pondeuse fumée entière", name: "Gros", retail: 4000, wholesale: null, pieces: 1 },
+    { id: "fume-moyen", group: "Pondeuse fumée entière", name: "Moyen", retail: 3500, wholesale: null, pieces: 1 },
+    { id: "fume-petit", group: "Pondeuse fumée entière", name: "Petit, lot de 3", retail: 10000, wholesale: null, pieces: 3, unit: "le lot de 3" },
+    { id: "fume-grossiste", group: "Pondeuse fumée entière", name: "Prix grossiste", retail: null, wholesale: 3300, pieces: 1 },
+    { id: "decoupe-gros", group: "Pondeuse fumée entière découpée", name: "Gros", retail: 4500, wholesale: null, pieces: 1 },
+    { id: "decoupe-moyen", group: "Pondeuse fumée entière découpée", name: "Moyen", retail: 4000, wholesale: null, pieces: 1 },
+    { id: "decoupe-petit", group: "Pondeuse fumée entière découpée", name: "Petit, lot de 3", retail: 10500, wholesale: null, pieces: 3, unit: "le lot de 3" },
+    { id: "decoupe-grossiste", group: "Pondeuse fumée entière découpée", name: "Prix grossiste", retail: null, wholesale: 3800, pieces: 1 },
+    { id: "fraiche", group: "Pondeuse fraîche entière découpée", name: "À l'unité", retail: 4000, wholesale: null, pieces: 1, image: "images/fraiche-decoupee.jpg", imageAlt: "Pondeuse fraîche découpée en barquette filmée HC SERVICES" }
+  ]};
 
 function fcfa(n) {
   return Math.round(n).toLocaleString("fr-FR").replace(/ | /g, " ") + " FCFA";
@@ -232,19 +240,20 @@ function computeOrder(state) {
   for (const p of CONFIG.products) {
     const q = state.qty[p.id] || 0;
     const price = unitPrice(p, state.profile);
-    if (q > 0 && price != null) lines.push({ id: p.id, name: p.name, qty: q, price, amount: q * price });
+    if (q > 0 && price != null) lines.push({ id: p.id, name: p.group + ", " + p.name.charAt(0).toLowerCase() + p.name.slice(1), qty: q, price, amount: q * price, pieces: q * p.pieces });
   }
   const total = lines.reduce((s, l) => s + l.amount, 0);
+  const pieces = lines.reduce((s, l) => s + l.pieces, 0);
   const deposit = state.profile === "grossiste" ? Math.round(total * CONFIG.depositRate) : 0;
-  return { lines, total, deposit };
+  return { lines, total, pieces, deposit };
 }
 
 function validate(state, order) {
   const errs = [];
   if (order.lines.length === 0) errs.push("Choisissez au moins un poulet.");
   if (state.profile === "grossiste") {
-    const q = state.qty["fume-entier"] || 0;
-    if (q > 0 && q < CONFIG.wholesaleMin) errs.push("Le tarif grossiste démarre à " + CONFIG.wholesaleMin + " pondeuses fumées entières : il en manque " + (CONFIG.wholesaleMin - q) + ".");
+    const q = order.pieces;
+    if (q > 0 && q < CONFIG.wholesaleMin) errs.push("Le tarif grossiste démarre à " + CONFIG.wholesaleMin + " pondeuses : il en manque " + (CONFIG.wholesaleMin - q) + ".");
   }
   if (!state.date) errs.push("Choisissez une date.");
   if (state.mode === "livraison" && state.quartier.trim().length < 3) errs.push("Indiquez le quartier de livraison.");
@@ -283,12 +292,21 @@ const $ = (id) => document.getElementById(id);
 function renderProducts() {
   const box = $("products");
   box.innerHTML = "";
+  let lastGroup = "";
   for (const p of CONFIG.products) {
     const price = unitPrice(p, state.profile);
     if (price == null) continue;
+    if (p.group !== lastGroup) {
+      const h = document.createElement("div"); h.className = "group"; h.textContent = p.group;
+      box.appendChild(h); lastGroup = p.group;
+      if (p.image) {
+        const img = document.createElement("img"); img.className = "photo"; img.src = p.image; img.alt = p.imageAlt || p.group; img.loading = "lazy";
+        box.appendChild(img);
+      }
+    }
     const row = document.createElement("div");
     row.className = "product";
-    const unit = state.profile === "grossiste" ? "l'unité, tarif grossiste" : "l'unité";
+    const unit = p.unit || "l'unité";
     row.innerHTML =
       '<div><div class="name"></div><div class="price"><b></b> ' + unit + '</div></div>' +
       '<div class="stepper">' +
@@ -356,11 +374,11 @@ function update() {
     ? "Acompte de 30 % à la commande : " + fcfa(order.deposit) + " par Wave ou Orange Money au " + CONFIG.phoneDisplay + ", en indiquant votre nom. Le solde se règle à la livraison."
     : "Paiement à la livraison. Commandez au plus tard la veille.";
 
-  const fumeQty = state.qty["fume-entier"] || 0;
+  const fumeQty = order.pieces;
   const hint = $("hint");
   if (state.profile === "detaillant" && fumeQty >= CONFIG.wholesaleMin) {
     hint.hidden = false;
-    hint.textContent = "À partir de " + CONFIG.wholesaleMin + " pondeuses fumées entières, le profil grossiste vous donne " + fcfa(3300) + " l'unité, avec livraison le samedi et un acompte de 30 %.";
+    hint.textContent = "À partir de " + CONFIG.wholesaleMin + " pondeuses fumées, le profil grossiste vous donne " + fcfa(3300) + " l'unité en entier et " + fcfa(3800) + " en découpé, avec livraison le samedi et un acompte de 30 %.";
   } else if (state.profile === "grossiste" && fumeQty > 0 && fumeQty < CONFIG.wholesaleMin) {
     hint.hidden = false;
     hint.textContent = "Encore " + (CONFIG.wholesaleMin - fumeQty) + " pour atteindre le minimum grossiste de " + CONFIG.wholesaleMin + ".";
